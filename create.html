@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Project | BlackLogic</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --primary:#ff6a00;
+  --bg:#0d0d0d;
+  --card-bg:#1a1a1a;
+}
+
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color:white;
+}
+
+header {
+  height:100px;
+  background: var(--primary);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:24px;
+  font-weight:bold;
+  box-shadow:0 2px 10px rgba(0,0,0,0.4);
+}
+
+.banner {
+  width:100%;
+  height:200px;
+  background:url('site.png') center/cover no-repeat;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:30px;
+}
+
+.banner h1 {
+  background:rgba(0,0,0,0.6);
+  padding:20px 40px;
+  border-radius:12px;
+  font-size:28px;
+}
+
+.container {
+  padding:30px;
+  max-width:900px;
+  margin:auto;
+}
+
+.section {
+  background: var(--card-bg);
+  padding:25px;
+  border-radius:12px;
+  border:1px solid rgba(255,106,0,0.3);
+  margin-bottom:40px;
+}
+
+.section h2 {
+  color: var(--primary);
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:24px;
+}
+
+.form-group {
+  margin-bottom:18px;
+}
+
+.form-group label {
+  display:block;
+  font-weight:bold;
+  color:var(--primary);
+  margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select {
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  background:#111;
+  color:white;
+  border:1px solid #333;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline:none;
+  border:1px solid var(--primary);
+}
+
+.status-buttons {
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.status-buttons button {
+  flex:1;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #444;
+  background:#222;
+  color:white;
+  cursor:pointer;
+}
+
+.status-active {
+  background:#28a745 !important;
+}
+
+.terms-group {
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  margin-top:5px;
+}
+
+.terms-group label {
+  font-weight:normal;
+  color:#ddd;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+button.submit-btn {
+  padding:12px 25px;
+  border:none;
+  border-radius:8px;
+  background: var(--primary);
+  color:white;
+  cursor:pointer;
+  font-size:16px;
+  margin-top:15px;
+}
+
+.receipt {
+  background:white;
+  color:black;
+  padding:25px;
+  margin-top:25px;
+  border-radius:12px;
+  font-family: monospace;
+}
+
+.download-btn {
+  margin-top:15px;
+  padding:10px 20px;
+  background:#111;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<header> Project Management Studio</header>
+
+<div class="banner">
+  <h1><i class="fas fa-building"></i> Create Project</h1>
+</div>
+
+<div class="container">
+
+<div class="section">
+<h2><i class="fas fa-folder-plus"></i> Project Details</h2>
+
+<div class="form-group">
+<label>Role</label>
+<select id="role">
+<option value="">Select Role</option>
+<option value="Project Manager">Project Manager</option>
+<option value="Civil Engineer">Civil Engineering</option>
+<option value="Construction Technologist">Construction Technologist</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Initials & Surname</label>
+<input type="text" id="name">
+</div>
+
+<div class="form-group">
+<label>Company Name (CIPC Registration)</label>
+<input type="text" id="company">
+</div>
+
+<div class="form-group">
+<label>Company Registration Number</label>
+<input type="text" id="regno">
+</div>
+
+<div class="form-group">
+<label>Project Name</label>
+<input type="text" id="project">
+</div>
+
+<div class="form-group">
+<label>Location</label>
+<input type="text" id="location">
+</div>
+
+<div class="form-group">
+<label>Client Name</label>
+<input type="text" id="client">
+</div>
+
+<div class="form-group">
+<label>Start Date</label>
+<input type="date" id="start">
+</div>
+
+<div class="form-group">
+<label>Deadline Estimation</label>
+<input type="date" id="deadline">
+</div>
+
+<div class="form-group">
+  <label>Budget (ZAR)</label>
+  <div style="position:relative;">
+    <span style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#ff6a00;">R</span>
+    <input type="number" id="budget" step="0.01" style="padding-left:25px;" placeholder="0.00">
+  </div>
+</div>
+
+<div class="form-group">
+<label>Status</label>
+<div class="status-buttons">
+<button type="button" onclick="setStatus(this,'🗺 Planning')">🗺 Planning</button>
+<button type="button" onclick="setStatus(this,'🕔 Ongoing')">🕔 Ongoing</button>
+<button type="button" onclick="setStatus(this,'✅ Completed')">✅ Completed</button>
+</div>
+</div>
+
+<div class="form-group">
+<label>Terms & Conditions</label>
+<div class="terms-group">
+<label><input type="checkbox" class="terms"> I confirm all information is correct.</label>
+<label><input type="checkbox" class="terms"> I understand no edits can be made after submission.</label>
+<label><input type="checkbox" class="terms"> I accept full responsibility for data miscapture.</label>
+<label><input type="checkbox" class="terms"> I confirm that the project complies with all regulations.</label>
+</div>
+</div>
+
+<button class="submit-btn" onclick="generateProjectReceipt()">Submit</button>
+
+<div id="projectReceipt"></div>
+
+</div>
+
+</div>
+
+<script>
+let selectedStatus="";
+let mustDownload=false;
+let currentReceiptHTML="";
+
+function setStatus(btn,status){
+  document.querySelectorAll(".status-buttons button").forEach(b=>b.classList.remove("status-active"));
+  btn.classList.add("status-active");
+  selectedStatus=status;
+}
+
+function allTermsChecked(){
+  return [...document.querySelectorAll(".terms")].every(cb=>cb.checked);
+}
+
+function lockForm(section){
+  section.querySelectorAll("input, select, button").forEach(el=>{
+    if(!el.classList.contains("download-btn")) el.disabled=true;
+  });
+}
+
+function downloadReceipt(content){
+  const blob=new Blob([content],{type:"text/html"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="project_receipt.html";
+  a.click();
+  mustDownload=false;
+}
+
+window.onbeforeunload=function(){
+  if(mustDownload){
+    return "Admin must download receipt before leaving.";
+  }
+};
+
+function formatZAR(value){
+  const num=parseFloat(value||0);
+  return "R "+num.toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function generateProjectReceipt(){
+  if(!selectedStatus){
+    alert("Select project status.");
+    return;
+  }
+  if(!allTermsChecked()){
+    alert("Please accept all terms.");
+    return;
+  }
+
+  const number="BLX-"+Date.now();
+  const formattedBudget=formatZAR(document.getElementById("budget").value);
+
+  currentReceiptHTML=`
+  <div class="receipt">
+  <h3>PROJECT RECEIPT</h3>
+  <strong>Role:</strong> ${document.getElementById("role").value}<br>
+  <strong>Name:</strong> ${document.getElementById("name").value}<br>
+  <strong>Project Number:</strong> ${number}<br><br>
+  <strong>Company:</strong> ${document.getElementById("company").value}<br>
+  <strong>Registration:</strong> ${document.getElementById("regno").value}<br>
+  <strong>Project:</strong> ${document.getElementById("project").value}<br>
+  <strong>Location:</strong> ${document.getElementById("location").value}<br>
+  <strong>Client:</strong> ${document.getElementById("client").value}<br>
+  <strong>Start:</strong> ${document.getElementById("start").value}<br>
+  <strong>Deadline:</strong> ${document.getElementById("deadline").value}<br>
+  <strong>Budget:</strong> ${formattedBudget}<br>
+  <strong>Status:</strong> ${selectedStatus}<br>
+  </div>`;
+
+  const container=document.getElementById("projectReceipt");
+  container.innerHTML=currentReceiptHTML+
+  `<button class="download-btn" onclick='downloadReceipt(\`${currentReceiptHTML}\`)'>
+  <i class="fas fa-download"></i> Download Receipt
+  </button>`;
+
+  lockForm(document.querySelector(".section"));
+  mustDownload=true;
+}
+</script>
+
+</body>
+</html>

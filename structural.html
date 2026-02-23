@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Structural Design Studio | BlackLogic Construction</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--primary:#ff6a00;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{background:#0d0d0d;color:white;min-height:100vh;padding-bottom:50px;}
+.banner{height:200px;margin:20px;border-radius:20px;background:#111 url('struct.png') center/cover no-repeat;display:flex;justify-content:center;align-items:center;box-shadow:0 0 35px rgba(255,106,0,0.5);}
+.banner h1{background:rgba(0,0,0,0.7);padding:20px 40px;border-radius:15px;}
+.container{margin:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
+.instruction{background:#1a1a1a;padding:20px;border-radius:15px;border:1px solid rgba(255,106,0,0.3);text-align:center;}
+.instruction i{font-size:36px;margin-bottom:10px;color:var(--primary);}
+.instruction p{margin-top:10px;font-size:14px;line-height:1.4;}
+.open-btn{display:block;width:fit-content;margin:30px auto;padding:15px 30px;font-size:16px;font-weight:600;border:none;border-radius:10px;background:var(--primary);color:white;cursor:pointer;transition:0.3s;text-align:center;}
+.open-btn:hover{background:#ff7f33;}
+</style>
+</head>
+<body>
+
+<div class="banner">
+  
+</div>
+
+<div class="container">
+  <div class="instruction">
+    <i class="fas fa-ruler-combined"></i>
+    <p>Define your structural elements: beams, columns, and supports.</p>
+  </div>
+  <div class="instruction">
+    <i class="fas fa-cogs"></i>
+    <p>Apply loads and forces to analyze stresses and reactions.</p>
+  </div>
+  <div class="instruction">
+    <i class="fas fa-chart-line"></i>
+    <p>Check diagrams of moments, shears, and displacements.</p>
+  </div>
+  <div class="instruction">
+    <i class="fas fa-file-export"></i>
+    <p>Export your results for reporting and documentation.</p>
+  </div>
+</div>
+
+<button class="open-btn" onclick="openFtool()">🚀 Open FTOOL Web</button>
+
+<script>
+function openFtool(){
+  window.open('https://www.ftool.com.br/','_blank');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Reporting | BlackLogic Construction</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--primary:#ff6a00;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{background:#0d0d0d;color:white;}
+.banner{height:250px;width:100%;background:url('site.png') center/cover no-repeat;display:flex;align-items:center;justify-content:center;text-align:center;box-shadow:0 0 30px rgba(255,106,0,0.6);margin-bottom:20px;}
+.banner h1{background:rgba(0,0,0,0.7);padding:20px 40px;border-radius:15px;}
+.container{padding:30px; max-width:900px;margin:auto;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;margin-bottom:6px;font-weight:bold;color:var(--primary);}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px;border-radius:8px;border:none;background:#111;color:white;border:1px solid #333;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border:1px solid var(--primary);outline:none;}
+button{padding:12px 25px;border:none;border-radius:8px;cursor:pointer;background:var(--primary);color:white;margin-top:15px;font-size:16px;}
+.status-buttons{display:flex;gap:10px;margin-top:5px;}
+.status-buttons button{flex:1;background:#222;border:1px solid #444;}
+.status-active{background:#28a745 !important;}
+.receipt{background:white;color:black;padding:25px;margin-top:25px;border-radius:10px;font-family:monospace;}
+.download-btn{background:#111;color:white;margin-top:15px;}
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <h1>Project Reporting</h1>
+</div>
+
+<div class="container">
+
+<div class="section">
+
+<div class="form-group">
+<label>Site No (Auto-generated)</label>
+<input type="text" id="siteNo" readonly>
+</div>
+
+<div class="form-group">
+<label>Project Name</label>
+<input type="text" id="projectName">
+</div>
+
+<div class="form-group">
+<label>Start Date</label>
+<input type="date" id="startDate">
+</div>
+
+<div class="form-group">
+<label>Budget (ZAR)</label>
+<input type="number" id="budget" placeholder="R">
+</div>
+
+<div class="form-group">
+<label>Issue / Fault Description</label>
+<textarea id="issueDesc" placeholder="Describe the problem or fault"></textarea>
+</div>
+
+<div class="form-group">
+<label>Issue Status</label>
+<div class="status-buttons">
+<button type="button" onclick="setIssueStatus(this,'🕔 Minor')">🕔 Minor</button>
+<button type="button" onclick="setIssueStatus(this,'🗺 Mild')">🗺 Mild</button>
+<button type="button" onclick="setIssueStatus(this,'⛔️ Extreme')">⛔️ Extreme</button>
+</div>
+</div>
+
+<div class="form-group">
+<label>Define Fault / Issue</label>
+<textarea id="faultDef" placeholder="Define the fault clearly"></textarea>
+</div>
+
+<div class="form-group">
+<label>Comment</label>
+<textarea id="comment" placeholder="Add any additional comment"></textarea>
+</div>
+
+<button id="submitBtn">Submit</button>
+
+<div id="reportReceipt"></div>
+
+</div>
+</div>
+
+<script>
+let selectedIssueStatus = "";
+let mustDownload = false;
+
+// Auto-generate Site Number
+function generateSiteNo() {
+  const now = new Date();
+  const siteNo = 'BLR-' + now.getFullYear().toString().slice(-2) 
+                 + (now.getMonth()+1).toString().padStart(2,'0') 
+                 + now.getDate().toString().padStart(2,'0')
+                 + '-' + Math.floor(Math.random()*9000 + 1000);
+  document.getElementById("siteNo").value = siteNo;
+}
+generateSiteNo();
+
+function setIssueStatus(btn,status){
+  document.querySelectorAll(".status-buttons button")
+  .forEach(b => b.classList.remove("status-active"));
+  btn.classList.add("status-active");
+  selectedIssueStatus = status;
+}
+
+// Function to get conclusion statement based on issue status
+function getConclusion(status){
+  switch(status){
+    case '🕔 Minor':
+      return "This is a minor fault. It will take 3 to 7 days to fix this fault.";
+    case '🗺 Mild':
+      return "This is a mild fault. It will take 7 to 14 days to fix this fault.";
+    case '⛔️ Extreme':
+      return "This is an extreme fault. It requires research before the construction site can resume work.";
+    default:
+      return "";
+  }
+}
+
+function downloadReceiptHTML(content){
+  const blob = new Blob([content], {type:"text/html"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "report_receipt.html";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  mustDownload = false;
+}
+
+document.getElementById("submitBtn").addEventListener("click", function(){
+  if(!selectedIssueStatus){
+    alert("Select issue status.");
+    return;
+  }
+
+  const conclusionStatement = getConclusion(selectedIssueStatus);
+
+  const receiptContent = `
+<div class='receipt'>
+  <h3>PROJECT REPORT RECEIPT</h3><br>
+  Site No: ${document.getElementById("siteNo").value}<br>
+  Project Name: ${document.getElementById("projectName").value}<br>
+  Start Date: ${document.getElementById("startDate").value}<br>
+  Budget: R${document.getElementById("budget").value}<br>
+  Issue Description: ${document.getElementById("issueDesc").value}<br>
+  Issue Status: ${selectedIssueStatus}<br>
+  Fault / Issue Defined: ${document.getElementById("faultDef").value}<br>
+  Comment: ${document.getElementById("comment").value}<br><br>
+  <strong>Conclusion:</strong> ${conclusionStatement}
+</div>`;
+
+  document.getElementById("reportReceipt").innerHTML = receiptContent;
+
+  // Add download button safely
+  const downloadBtn = document.createElement("button");
+  downloadBtn.className = "download-btn";
+  downloadBtn.innerHTML = `<i class="fas fa-download"></i> Download`;
+  downloadBtn.addEventListener("click", function(){
+    downloadReceiptHTML(receiptContent);
+  });
+
+  document.getElementById("reportReceipt").appendChild(downloadBtn);
+
+  // Lock form except download button
+  document.querySelectorAll(".section")[0].querySelectorAll("input, textarea, button")
+  .forEach(el => {
+    if(el !== downloadBtn){
+      el.disabled = true;
+    }
+  });
+
+  mustDownload = true;
+});
+
+window.onbeforeunload = function(){
+  if(mustDownload){
+    return "Admin must download receipt before leaving.";
+  }
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Material Supply | BlackLogic Construction</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{
+  --primary:#ff6a00;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  background:#0d0d0d;
+  color:white;
+}
+
+/* Banner */
+.banner{
+  height:200px;
+  width:100%;
+  background:url('site.png') center/cover no-repeat;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 20px rgba(255,106,0,0.6);
+}
+
+.banner h1{
+  background:rgba(0,0,0,0.7);
+  padding:20px 40px;
+  border-radius:15px;
+}
+
+/* Layout */
+.container{
+  padding:20px 30px;
+}
+
+.section{
+  margin-bottom:40px;
+  padding:25px;
+  background:#1a1a1a;
+  border-radius:15px;
+  border:1px solid rgba(255,106,0,0.3);
+}
+
+.section h2{
+  margin-bottom:20px;
+  color:var(--primary);
+}
+
+/* Form Groups */
+.form-group{
+  margin-bottom:15px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:5px;
+  font-weight:bold;
+  color:var(--primary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  background:#111;
+  color:white;
+  border:1px solid #333;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  border:1px solid var(--primary);
+  outline:none;
+}
+
+button{
+  padding:10px 20px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:var(--primary);
+  color:white;
+  margin-top:10px;
+}
+
+/* Status buttons */
+.status-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:5px;
+}
+
+.status-buttons button{
+  flex:1;
+  background:#222;
+  border:1px solid #444;
+}
+
+.status-active{
+  background:#28a745 !important;
+}
+
+/* Receipt */
+.receipt{
+  background:white;
+  color:black;
+  padding:20px;
+  margin-top:15px;
+  border-radius:10px;
+  font-family:monospace;
+}
+
+.download-btn{
+  background:#111;
+  color:white;
+  margin-top:10px;
+}
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <h1>Material Supply Entry</h1>
+</div>
+
+<div class="container">
+
+<div class="section">
+<h2>Material Entry</h2>
+
+<!-- Authority -->
+<div class="form-group">
+<label>Authority</label>
+<select id="authority">
+  <option value="">Select Role</option>
+  <option value="Project Manager">Project Manager</option>
+  <option value="Civil Engineer">Civil Engineer</option>
+  <option value="Construction Technologist">Construction Technologist</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Initials & Surname</label>
+<input type="text" id="personName">
+</div>
+
+<!-- Supplier Reference -->
+<div class="form-group">
+<label>Supplier Reference (Initials & Surname + Role)</label>
+<input type="text" id="supplierRef" placeholder="e.g. J.Doe - Manager">
+</div>
+
+<!-- Delivery and Material -->
+<div class="form-group">
+<label>Delivery Date</label>
+<input type="date" id="delivery">
+</div>
+
+<div class="form-group">
+<label>Type of Material</label>
+<select id="materialType" onchange="updateQuantityInput()">
+  <option value="">Select Material</option>
+  <option value="Bricks">Bricks</option>
+  <option value="Concrete">Concrete</option>
+  <option value="Sand">Sand</option>
+  <option value="Cement">Cement</option>
+  <option value="Reinforcement">Reinforcement</option>
+</select>
+</div>
+
+<div class="form-group" id="quantityGroup">
+<label>Quantity</label>
+<input type="number" id="quantity" step="1" placeholder="Enter quantity">
+</div>
+
+<div class="form-group">
+<label>Cost (ZAR)</label>
+<input type="number" id="cost" step="0.01" placeholder="R 0.00">
+</div>
+
+<div class="form-group">
+<label>Supplier Name</label>
+<input type="text" id="supplier">
+</div>
+
+<div class="form-group">
+<label>CSD Supplier Number</label>
+<input type="text" id="csd">
+</div>
+
+<!-- Supply Status -->
+<div class="form-group">
+  <label>Supply Status</label>
+  <div class="status-buttons" style="display:flex; gap:10px; flex-wrap:wrap;">
+    <button type="button" onclick="setSupplyStatus(this,'✅ Completed')">✅ Completed</button>
+    <button type="button" onclick="setSupplyStatus(this,'⚠️ Surplus')">⚠️ Surplus</button>
+    <button type="button" onclick="setSupplyStatus(this,'❌ Shortage')">❌ Shortage</button>
+  </div>
+</div>
+<!-- Terms -->
+<div class="form-group">
+<label>Terms & Conditions</label>
+<div style="display:flex; flex-direction:column; gap:5px;">
+<label><input type="checkbox" class="terms"> I confirm all material data is correct.</label>
+<label><input type="checkbox" class="terms"> Evidence data is authentic.</label>
+<label><input type="checkbox" class="terms"> Receipt data is authentic.</label>
+<label><input type="checkbox" class="terms"> I accept responsibility for this entry.</label>
+</div>
+</div>
+
+<button onclick="generateMaterialReceipt()">Submit</button>
+<div id="materialReceipt"></div>
+
+</div>
+
+<script>
+let selectedStatus="";
+
+// Dynamic Quantity Label
+function updateQuantityInput(){
+  const material = document.getElementById("materialType").value;
+  const label = document.querySelector("#quantityGroup label");
+  const input = document.getElementById("quantity");
+
+  if(material === "Bricks" || material === "Cement" || material === "Reinforcement"){
+    label.textContent = "Quantity (per item)";
+    input.placeholder = "Enter quantity";
+    input.step = "1";
+  } else if(material === "Sand" || material === "Concrete"){
+    label.textContent = "Amount (Tons)";
+    input.placeholder = "Enter amount in tons";
+    input.step = "0.1";
+  } else {
+    label.textContent = "Quantity";
+    input.placeholder = "Enter quantity";
+    input.step = "1";
+  }
+}
+
+// Supply Status
+function setSupplyStatus(btn,status){
+  document.querySelectorAll(".status-buttons button").forEach(b=>{
+    b.classList.remove("status-active");
+  });
+  btn.classList.add("status-active");
+  selectedStatus=status;
+}
+
+// Check all terms
+function allChecked(className){
+  return [...document.querySelectorAll("."+className)].every(cb => cb.checked);
+}
+
+// Lock Form
+function lockForm(section){
+  section.querySelectorAll("input, select, textarea, button")
+  .forEach(el=>{
+    if(!el.classList.contains("download-btn")){
+      el.disabled=true;
+    }
+  });
+}
+
+// Download receipt
+function downloadReceipt(content){
+  const blob=new Blob([content],{type:"text/html"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="material_receipt.html";
+  a.click();
+}
+
+// Generate Receipt
+function generateMaterialReceipt(){
+  if(!allChecked("terms")){
+    alert("Please accept all terms.");
+    return;
+  }
+
+  if(!selectedStatus){
+    alert("Select supply status.");
+    return;
+  }
+
+  const receiptContent=`
+  <div class="receipt">
+    <h3>MATERIAL SUPPLY RECEIPT</h3>
+    Authority: ${document.getElementById("authority").value}<br>
+    Name: ${document.getElementById("personName").value}<br>
+    Supplier Reference: ${document.getElementById("supplierRef").value}<br>
+    Delivery Date: ${document.getElementById("delivery").value}<br>
+    Material Type: ${document.getElementById("materialType").value}<br>
+    Quantity: ${document.getElementById("quantity").value}<br>
+    Cost: R ${parseFloat(document.getElementById("cost").value||0).toFixed(2)}<br>
+    Supplier: ${document.getElementById("supplier").value}<br>
+    CSD Number: ${document.getElementById("csd").value}<br>
+    Supply Status: ${selectedStatus}
+  </div>`;
+
+  const container=document.getElementById("materialReceipt");
+  container.innerHTML=receiptContent+
+  `<button class="download-btn" onclick='downloadReceipt(\`${receiptContent}\`)'>
+    <i class="fas fa-download"></i> Download Receipt
+  </button>`;
+
+  lockForm(document.querySelector(".section"));
+}
+</script>
+
+</body>
+</html>

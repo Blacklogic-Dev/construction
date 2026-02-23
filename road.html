@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Road Engineering Studio | BlackLogic Construction</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--primary:#ff6a00;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{background:#0d0d0d;color:white;min-height:100vh;padding-bottom:50px;}
+.banner{height:220px;margin:20px;border-radius:20px;background:#111 url('road.png') center/cover no-repeat;display:flex;justify-content:center;align-items:center;flex-direction:column;text-align:center;box-shadow:0 0 35px rgba(255,106,0,0.5);}
+.banner h1{background:rgba(0,0,0,0.7);padding:20px 40px;border-radius:15px;font-size:28px;color:white;margin-bottom:10px;}
+.banner p{font-size:16px;color:#ddd;}
+.container{margin:25px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
+.instruction{background:#1a1a1a;padding:20px;border-radius:15px;border:1px solid rgba(255,106,0,0.3);text-align:center;box-shadow:0 0 15px rgba(255,106,0,0.3);}
+.instruction i{font-size:36px;margin-bottom:10px;color:var(--primary);}
+.instruction p{margin-top:10px;font-size:14px;line-height:1.4;}
+.tool-buttons{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin:30px;}
+.tool-buttons button{flex:1 1 220px;padding:15px 25px;background:var(--primary);border:none;border-radius:12px;cursor:pointer;color:white;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;transition:0.3s;}
+.tool-buttons button:hover{background:#ff7f33;}
+</style>
+</head>
+<body>
+
+<div class="banner">
+  
+</div>
+
+<div class="container">
+  <div class="instruction">
+    <i class="fas fa-map-signs"></i>
+    <p>Define horizontal and vertical alignments for road centrelines.</p>
+  </div>
+  <div class="instruction">
+    <i class="fas fa-drafting-compass"></i>
+    <p>Use coordinate geometry calculators (COGO) to compute distances, angles, and station data.</p>
+  </div>
+  <div class="instruction">
+    <i class="fas fa-road"></i>
+    <p>Draft road plans and profiles in AutoCAD Web.</p>
+  </div>
+  <div class="instruction">
+    <i class="fas fa-globe"></i>
+    <p>Reference geographic location data with maps for survey planning.</p>
+  </div>
+</div>
+
+<!-- Tool Buttons (keep as is) -->
+<div class="tool-buttons">
+  <button onclick="window.open('https://web.autocad.com','_blank')">
+    <i class="fas fa-drafting-compass"></i> AutoCAD Web (Road Design)
+  </button>
+
+  <button onclick="window.open('https://viewer.autodesk.com','_blank')">
+    <i class="fas fa-eye"></i> Autodesk Civil 3D Viewer
+  </button>
+
+  <button onclick="window.open('https://maps.google.com','_blank')">
+    <i class="fas fa-map-marked-alt"></i> Google Maps
+  </button>
+</div>
+
+<!-- Coordinator Tables -->
+<div style="margin: 30px;">
+  <h2 style="color: var(--primary); margin-bottom: 15px;">Survey Details</h2>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 30px;">
+    <thead>
+      <tr style="background: var(--primary); color: white;">
+        <th style="padding: 10px; border: 1px solid #333;">Point ID</th>
+        <th style="padding: 10px; border: 1px solid #333;">Coordinates (X, Y)</th>
+        <th style="padding: 10px; border: 1px solid #333;">Elevation</th>
+      </tr>
+    </thead>
+    <tbody id="surveyTable">
+      <tr><td>P1</td><td>123.45, 678.90</td><td>12.3 m</td></tr>
+      <tr><td>P2</td><td>124.00, 679.20</td><td>12.5 m</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="color: var(--primary); margin-bottom: 15px;">Road Design Alignment</h2>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 30px;">
+    <thead>
+      <tr style="background: var(--primary); color: white;">
+        <th style="padding: 10px; border: 1px solid #333;">Segment ID</th>
+        <th style="padding: 10px; border: 1px solid #333;">Length (m)</th>
+        <th style="padding: 10px; border: 1px solid #333;">Slope (%)</th>
+      </tr>
+    </thead>
+    <tbody id="alignmentTable">
+      <tr><td>S1</td><td>50</td><td>2</td></tr>
+      <tr><td>S2</td><td>75</td><td>1.5</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="color: var(--primary); margin-bottom: 15px;">Materials / Construction Notes</h2>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 30px;">
+    <thead>
+      <tr style="background: var(--primary); color: white;">
+        <th style="padding: 10px; border: 1px solid #333;">Item</th>
+        <th style="padding: 10px; border: 1px solid #333;">Quantity</th>
+        <th style="padding: 10px; border: 1px solid #333;">Notes</th>
+      </tr>
+    </thead>
+    <tbody id="materialsTable">
+      <tr><td>Gravel</td><td>50 tons</td><td>Base layer</td></tr>
+      <tr><td>Asphalt</td><td>30 tons</td><td>Surface layer</td></tr>
+    </tbody>
+  </table>
+</div>

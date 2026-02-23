@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Construction Studio | BlackLogic Construction</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{
+  --primary:#ff6a00;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  background:#0d0d0d;
+  color:white;
+}
+
+/* Banner */
+.banner{
+  height:200px;
+  width:100%;
+  background:url('site4.png') center/cover no-repeat;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 30px rgba(255,106,0,0.6);
+  margin-bottom:20px;
+}
+
+.banner h1{
+  background:rgba(0,0,0,0.7);
+  padding:20px 40px;
+  border-radius:15px;
+}
+
+/* Container */
+.container{
+  padding:20px 30px;
+}
+
+/* Instructions Grid */
+.instructions{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap:15px;
+  margin-bottom:30px;
+}
+
+.instruction-item{
+  background:#1a1a1a;
+  border:1px solid rgba(255,106,0,0.3);
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.instruction-item span{
+  display:block;
+  font-size:30px;
+  margin-bottom:10px;
+}
+
+/* Form */
+.section{
+  background:#1a1a1a;
+  border:1px solid rgba(255,106,0,0.3);
+  border-radius:15px;
+  padding:20px;
+  margin-bottom:30px;
+  position:relative;
+}
+
+.form-group{
+  margin-bottom:15px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:5px;
+  font-weight:bold;
+  color:var(--primary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  background:#111;
+  color:white;
+  border:1px solid #333;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  border:1px solid var(--primary);
+  outline:none;
+}
+
+/* Buttons */
+button{
+  padding:10px 20px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:var(--primary);
+  color:white;
+  margin-top:10px;
+  font-weight:600;
+}
+
+button:hover{
+  background:#ff7f33;
+}
+
+/* Prompt Output */
+.prompt-output{
+  position: relative;
+  background:#111;
+  border:1px solid rgba(255,106,0,0.5);
+  padding:15px;
+  border-radius:10px;
+  margin-top:15px;
+  font-family:monospace;
+  white-space:pre-wrap;
+  word-wrap:break-word;
+}
+
+/* Open AI Button */
+.open-ai-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-size:16px;
+  margin-top:15px;
+}
+
+.copy-icon{
+  position:absolute;
+  top:10px;
+  right:10px;
+  cursor:pointer;
+  color:var(--primary);
+  font-size:18px;
+}
+</style>
+</head>
+<body>
+
+<div class="banner">
+  
+</div>
+
+<div class="container">
+
+  <!-- Instructions Grid -->
+  <div class="instructions">
+    <div class="instruction-item">
+      <span>📝</span>
+      Fill the form carefully
+    </div>
+    <div class="instruction-item">
+      <span>⚡</span>
+      Generate AI prompt
+    </div>
+    <div class="instruction-item">
+      <span>🔗</span>
+      Copy prompt to OpenAI
+    </div>
+    <div class="instruction-item">
+      <span>💡</span>
+      Ask only Project Management, Building, or Road Engineering
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="section">
+    <div class="form-group">
+      <label>Project Type</label>
+      <select id="projectType">
+        <option value="">Select Type</option>
+        <option value="Project Management">Project Management</option>
+        <option value="Building Design">Building Design</option>
+        <option value="Road Engineering">Road Engineering</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Project Details / Goal</label>
+      <textarea id="projectDetails" placeholder="Describe your goal or question..."></textarea>
+    </div>
+
+    <button onclick="generatePrompt()">Generate Prompt</button>
+
+    <!-- Prompt Output -->
+    <div class="prompt-output" id="promptOutput">
+      <i class="fas fa-copy copy-icon" id="copyPromptBtn" title="Copy Prompt"></i>
+    </div>
+
+    <button class="open-ai-btn" onclick="openAI()">
+      <i class="fas fa-microchip"></i> Open AI
+    </button>
+  </div>
+
+</div>
+
+<script>
+let currentPrompts = [];
+
+// Generate 2 AI prompts
+function generatePrompt(){
+  const type = document.getElementById("projectType").value;
+  const details = document.getElementById("projectDetails").value.trim();
+
+  if(!type){
+    alert("Select a project type.");
+    return;
+  }
+  if(!details){
+    alert("Enter project details or goal.");
+    return;
+  }
+
+  currentPrompts = [
+    `Create a detailed ${type} plan based on the following input: "${details}". Provide structured guidance and steps.`,
+    `Analyze the ${type} requirements from this description: "${details}". Generate actionable insights and recommendations.`
+  ];
+
+  document.getElementById("promptOutput").innerText = currentPrompts.join("\n\n---\n\n");
+}
+
+// Copy prompt to clipboard
+document.getElementById("copyPromptBtn").addEventListener("click", () => {
+  const promptText = document.getElementById("promptOutput").innerText;
+  if(!promptText){
+    alert("Nothing to copy! Generate prompts first.");
+    return;
+  }
+  navigator.clipboard.writeText(promptText)
+    .then(() => alert("Prompt copied to clipboard!"))
+    .catch(err => alert("Failed to copy: "+err));
+});
+
+// Open AI in new tab
+function openAI(){
+  if(currentPrompts.length === 0){
+    alert("Generate prompts first!");
+    return;
+  }
+  window.open("https://chat.openai.com/", "_blank");
+}
+</script>
+
+</body>
+</html>

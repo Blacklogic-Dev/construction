@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlackLogic Construction Studio</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+  height:100vh;
+  background:url('site.png') no-repeat center center/cover;
+  display:flex;
+  flex-direction:column;
+}
+
+/* Dark overlay */
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:-1;
+}
+
+/* Banner */
+.banner{
+  height:300px;
+  width:100%;
+  display:grid;
+  place-items:center;
+  backdrop-filter: blur(10px);
+  background:rgba(0,0,0,0.4);
+  text-align:center;
+  padding:20px;
+}
+
+.banner h1{
+  color:#fff;
+  font-size:32px;
+  margin-bottom:10px;
+}
+
+.banner p{
+  color:#ccc;
+  margin-bottom:20px;
+}
+
+.banner button{
+  padding:12px 25px;
+  border:none;
+  background:#00c896;
+  color:#fff;
+  cursor:pointer;
+  border-radius:5px;
+  font-weight:bold;
+  transition:0.3s;
+}
+
+.banner button:hover{
+  background:#00a87d;
+}
+
+/* Access Form */
+.access-form{
+  display:none;
+  margin:auto;
+  background:rgba(255,255,255,0.1);
+  padding:30px;
+  border-radius:10px;
+  backdrop-filter: blur(15px);
+  text-align:center;
+}
+
+.access-form input{
+  width:100%;
+  padding:10px;
+  margin-bottom:15px;
+  border:none;
+  border-radius:5px;
+}
+
+.access-form button{
+  width:100%;
+  padding:10px;
+  border:none;
+  background:#007bff;
+  color:#fff;
+  cursor:pointer;
+  border-radius:5px;
+}
+
+.loading{
+  opacity:0.7;
+  pointer-events:none;
+}
+.banner{
+  height:300px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+}
+
+.banner-content{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+}
+
+.banner-img{
+  max-width:500px;
+  width:90%;
+  border-radius:25px;   /* Curved corners */
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+}
+
+.banner button{
+  padding:12px 30px;
+  border:none;
+  background:#00c896;
+  color:white;
+  font-weight:bold;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.3s ease;
+}
+
+.banner button:hover{
+  background:#00a87d;
+  transform:scale(1.05);
+}
+</style>
+</head>
+
+<body>
+
+<div class="banner">
+  <div class="banner-content">
+    <img src="conc.png" alt="Construction Studio Banner" class="banner-img">
+    <button onclick="showForm()">Get Started</button>
+  </div>
+</div>
+
+<div class="access-form" id="formSection">
+  <h2 style="color:white;margin-bottom:15px;">Gain Access</h2>
+  <input type="text" placeholder="Username">
+  <button id="accessBtn" onclick="loadingAccess()">Gain Access</button>
+</div>
+
+<script>
+function showForm(){
+  document.getElementById("formSection").style.display="block";
+  document.getElementById("formSection").scrollIntoView({behavior:"smooth"});
+}
+
+function loadingAccess(){
+  const btn=document.getElementById("accessBtn");
+  btn.classList.add("loading");
+  btn.innerText="Loading...";
+  
+  setTimeout(()=>{
+    btn.innerText="Access Granted";
+    btn.style.background="#28a745";
+  },2000);
+}
+</script>
+
+</body>
+</html>
