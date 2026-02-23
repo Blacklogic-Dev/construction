@@ -18,6 +18,7 @@ body{
   background:url('site.png') no-repeat center center/cover;
   display:flex;
   flex-direction:column;
+  position:relative;
 }
 
 /* Dark overlay */
@@ -30,76 +31,6 @@ body::before{
 }
 
 /* Banner */
-.banner{
-  height:300px;
-  width:100%;
-  display:grid;
-  place-items:center;
-  backdrop-filter: blur(10px);
-  background:rgba(0,0,0,0.4);
-  text-align:center;
-  padding:20px;
-}
-
-.banner h1{
-  color:#fff;
-  font-size:32px;
-  margin-bottom:10px;
-}
-
-.banner p{
-  color:#ccc;
-  margin-bottom:20px;
-}
-
-.banner button{
-  padding:12px 25px;
-  border:none;
-  background:#00c896;
-  color:#fff;
-  cursor:pointer;
-  border-radius:5px;
-  font-weight:bold;
-  transition:0.3s;
-}
-
-.banner button:hover{
-  background:#00a87d;
-}
-
-/* Access Form */
-.access-form{
-  display:none;
-  margin:auto;
-  background:rgba(255,255,255,0.1);
-  padding:30px;
-  border-radius:10px;
-  backdrop-filter: blur(15px);
-  text-align:center;
-}
-
-.access-form input{
-  width:100%;
-  padding:10px;
-  margin-bottom:15px;
-  border:none;
-  border-radius:5px;
-}
-
-.access-form button{
-  width:100%;
-  padding:10px;
-  border:none;
-  background:#007bff;
-  color:#fff;
-  cursor:pointer;
-  border-radius:5px;
-}
-
-.loading{
-  opacity:0.7;
-  pointer-events:none;
-}
 .banner{
   height:300px;
   width:100%;
@@ -120,7 +51,7 @@ body::before{
 .banner-img{
   max-width:500px;
   width:90%;
-  border-radius:25px;   /* Curved corners */
+  border-radius:25px;  
   box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
 
@@ -139,6 +70,74 @@ body::before{
   background:#00a87d;
   transform:scale(1.05);
 }
+
+/* Access Form */
+.access-form{
+  display:none;
+  margin:auto;
+  background:rgba(255,255,255,0.1);
+  padding:30px;
+  border-radius:10px;
+  backdrop-filter: blur(15px);
+  text-align:center;
+}
+
+.access-form input{
+  width:200px;
+  padding:10px;
+  margin-bottom:15px;
+  border:none;
+  border-radius:5px;
+}
+
+.access-form button{
+  padding:10px 20px;
+  border:none;
+  background:#ff6a00;
+  color:white;
+  cursor:pointer;
+  border-radius:8px;
+  position:relative;
+  overflow:hidden;
+  font-weight:bold;
+}
+
+.loading{
+  opacity:0.6;
+  pointer-events:none;
+}
+
+/* Spinner */
+#spinner{
+  display:none;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:20px;
+  height:20px;
+  border:3px solid rgba(255,255,255,0.3);
+  border-top:3px solid white;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+#loginBtn{
+  display:none;
+  margin-top:15px;
+  padding:10px 25px;
+  border:none;
+  background:#28a745;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%,-50%) rotate(0deg); }
+  100% { transform: translate(-50%,-50%) rotate(360deg); }
+}
 </style>
 </head>
 
@@ -152,26 +151,56 @@ body::before{
 </div>
 
 <div class="access-form" id="formSection">
-  <h2 style="color:white;margin-bottom:15px;">Gain Access</h2>
-  <input type="text" placeholder="Username">
-  <button id="accessBtn" onclick="loadingAccess()">Gain Access</button>
+  <h2 style="color:white; margin-bottom:15px;">Gain Access</h2>
+  <input type="text" id="username" placeholder="Username">
+  <button id="accessBtn" onclick="validateAccess()">
+    Gain Access
+    <div id="spinner"></div>
+  </button>
+  <button id="loginBtn" onclick="goToDashboard()">Login</button>
 </div>
 
 <script>
+const allowedUsers = ["KX1011", "KX0011"];
+
 function showForm(){
-  document.getElementById("formSection").style.display="block";
-  document.getElementById("formSection").scrollIntoView({behavior:"smooth"});
+  const form = document.getElementById("formSection");
+  form.style.display = "block";
+  form.scrollIntoView({behavior:"smooth"});
 }
 
-function loadingAccess(){
-  const btn=document.getElementById("accessBtn");
+function validateAccess(){
+  const username = document.getElementById("username").value.trim().toUpperCase();
+  const btn = document.getElementById("accessBtn");
+  const spinner = document.getElementById("spinner");
+  const loginBtn = document.getElementById("loginBtn");
+
+  if(!allowedUsers.includes(username)){
+    alert("Access Denied 💻⛔️");
+    return;
+  }
+
+  // Show spinner & disable button
+  btn.disabled = true;
   btn.classList.add("loading");
-  btn.innerText="Loading...";
-  
+  spinner.style.display = "block";
+  btn.innerText = "";
+
+  // simulate loading
   setTimeout(()=>{
-    btn.innerText="Access Granted";
+    spinner.style.display = "none";
+    btn.innerText = "Access Granted 💻✅";
     btn.style.background="#28a745";
-  },2000);
+    btn.classList.remove("loading");
+
+    // Show manual Login button
+    loginBtn.style.display = "inline-block";
+
+  },1500);
+}
+
+function goToDashboard(){
+  window.location.href = "dashboard.html";
 }
 </script>
 
